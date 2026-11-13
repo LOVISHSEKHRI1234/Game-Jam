@@ -1,0 +1,194 @@
+"""Sprite animation system for loading and playing sprite sheet animations."""
+import pygame
+import os
+
+
+class SpriteSheet:
+    """Load and extract frames from a sprite sheet."""
+    
+    def __init__(self, path: str, frame_width: int, frame_height: int):
+        self.path = path
+        self.frame_width = frame_width
+        self.frame_height = frame_height
+        
+        try:
+            self.sheet = pygame.image.load(path).convert_alpha()
+        except pygame.error as e:
+            print(f"Error loading sprite sheet {path}: {e}")
+            # Create a fallback surface
+            self.sheet = pygame.Surface((frame_width, frame_height), pygame.SRCALPHA)
+            pygame.draw.rect(self.sheet, (255, 0, 255), (0, 0, frame_width, frame_height))
+    
+    def get_frame(self, col: int, row: int) -> pygame.Surface:
+        """Extract a single frame from the sprite sheet."""
+        x = col * self.frame_width
+        y = row * self.frame_height
+        
+        frame = pygame.Surface((self.frame_width, self.frame_height), pygame.SRCALPHA)
+        frame.blit(self.sheet, (0, 0), (x, y, self.frame_width, self.frame_height))
+        return frame
+    
+    def get_animation_frames(self, row: int, num_frames: int) -> list[pygame.Surface]:
+        """Extract a row of frames for an animation."""
+        return [self.get_frame(col, row) for col in range(num_frames)]
+
+
+class Animation:
+    """Manages a single animation sequence."""
+    
+    def __init__(self, frames: list[pygame.Surface], fps: float = 5.0, loop: bool = True,
+                 frame_durations: list[float] | None = None):
+        self.frames = frames
+        self.fps = fps
+        self.loop = loop
+        self.frame_duration = 1.0 / fps if fps > 0 else 1.0
+        # Per-frame durations override uniform fps timing
+        self.frame_durations = frame_durations  # e.g. [0.05, 0.05, 0.5, 0.5, 0.05, 0.05, 0.05, 0.05]
+        self.current_frame = 0
+        self.elapsed_time = 0.0
+        self.finished = False
+        self.disable_flip = False  # Set to True for custom animations that shouldn't be flipped
+    
+    def _get_current_frame_duration(self) -> float:
+        """Get duration for the current frame."""
+        if self.frame_durations and self.current_frame < len(self.frame_durations):
+            return self.frame_durations[self.current_frame]
+        return self.frame_duration
+    
+    def reset(self):
+        """Reset animation to the beginning."""
+        self.current_frame = 0
+        self.elapsed_time = 0.0
+        self.finished = False
+    
+    def update(self, dt: float):
+        """Update animation based on elapsed time."""
+        if self.finished:
+            return
+        
+        self.elapsed_time += dt
+        
+        duration = self._get_current_frame_duration()
+        while self.elapsed_time >= duration:
+            self.elapsed_time -= duration
+            self.current_frame += 1
+            
+            if self.current_frame >= len(self.frames):
+                if self.loop:
+                    self.current_frame = 0
+                else:
+                    self.current_frame = len(self.frames) - 1
+                    self.finished = True
+                    break
+            duration = self._get_current_frame_duration()
+    
+    def get_current_frame(self) -> pygame.Surface:
+        """Get the current frame surface."""
+        return self.frames[self.current_frame]
+
+
+class AnimatedSprite(pygame.sprite.Sprite):
+    """A sprite with multiple animations that can be switched between."""
+    
+    def __init__(self, x: float, y: float, sprite_config: dict):
+        super().__init__()
+        
+        self.pos = pygame.Vector2(x, y)
+        self.animations: dict[str, Animation] = {}
+        self.current_animation_name = ""
+        self.facing_right = True  # For horizontal flip
+        
+        # Load sprite sheet and animations from config
+        self._load_from_config(sprite_config)
+        
+        # Set initial image and rect
+        if self.animations:
+            first_anim = list(self.animations.keys())[0]
+            self.current_animation_name = first_anim
+            self.image = self.animations[first_anim].get_current_frame()
+        else:
+            self.image = pygame.Surface((32, 32), pygame.SRCALPHA)
+        
+        self.rect = self.image.get_rect()
+        self.rect.center = (int(x), int(y))
+    
+    def _load_from_config(self, config: dict):
+        """Load animations from a sprite configuration dictionary."""
+        sprite_sheet = SpriteSheet(
+            config['path'],
+            config['frame_width'],
+            config['frame_height']
+        )
+        
+        for anim_name, anim_data in config['animations'].items():
+            # Support per-animation sprite sheet override
+            has_custom_path = 'path' in anim_data
+            if has_custom_path:
+                anim_sheet = SpriteSheet(
+                    anim_data['path'],
+                    anim_data.get('frame_width', config['frame_width']),
+                    anim_data.get('frame_height', config['frame_height'])
+                )
+                # Support multi-row animations via 'rows' parameter
+                rows = anim_data.get('rows', 1)
+                frames_per_row = anim_data['frames']
+                frames = []
+                for r in range(rows):
+                    row_index = anim_data.get('row', 0) + r
+                    frames.extend(anim_sheet.get_animation_frames(row_index, frames_per_row))
+                # Scale frames if 'scale' is specified
+                if 'scale' in anim_data:
+                    s = anim_data['scale']
+                    frames = [
+                        pygame.transform.scale(f, (int(f.get_width() * s), int(f.get_height() * s)))
+                        for f in frames
+                    ]
+            else:
+                frames = sprite_sheet.get_animation_frames(
+                    anim_data['row'],
+                    anim_data['frames']
+                )
+            loop = anim_data.get('loop', True)
+            frame_durations = anim_data.get('frame_durations', None)
+            animation = Animation(frames, anim_data['fps'], loop, frame_durations)
+            # Mark animations with custom paths to not be flipped (unless allow_flip is True)
+            animation.disable_flip = has_custom_path and not anim_data.get('allow_flip', False)
+            self.animations[anim_name] = animation
+    
+    def add_animation(self, name: str, animation: Animation):
+        """Add an animation to the sprite."""
+        self.animations[name] = animation
+    
+    def play(self, animation_name: str, reset: bool = False):
+        """Switch to a different animation."""
+        if animation_name not in self.animations:
+            print(f"Warning: Animation '{animation_name}' not found")
+            return
+        
+        if animation_name != self.current_animation_name or reset:
+            self.current_animation_name = animation_name
+            if reset:
+                self.animations[animation_name].reset()
+    
+    def update(self, dt: float):
+        """Update the current animation."""
+        if self.current_animation_name in self.animations:
+            anim = self.animations[self.current_animation_name]
+            anim.update(dt)
+            frame = anim.get_current_frame()
+            if not self.facing_right and not anim.disable_flip:
+                frame = pygame.transform.flip(frame, True, False)
+            self.image = frame
+        
+        if self.rect is not None:
+            self.rect.center = (int(self.pos.x), int(self.pos.y))
+    
+    def is_animation_finished(self) -> bool:
+        """Check if the current animation has finished (for non-looping animations)."""
+        if self.current_animation_name in self.animations:
+            return self.animations[self.current_animation_name].finished
+        return True
+    
+    def get_current_animation(self) -> Animation | None:
+        """Get the current animation object."""
+        return self.animations.get(self.current_animation_name)

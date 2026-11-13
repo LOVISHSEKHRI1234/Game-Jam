@@ -1,0 +1,247 @@
+{
+  "name": "survival_arena_cosmos",
+  "width": 33,
+  "height": 33,
+  "tile_size": 16,
+  "tile_defs": {
+    "A": [
+      "station",
+      0,
+      0
+    ],
+    "B": [
+      "station",
+      1,
+      0
+    ],
+    "X": [
+      "station",
+      2,
+      0
+    ],
+    "R": [
+      "station",
+      3,
+      0
+    ],
+    "H": [
+      "station",
+      5,
+      0
+    ],
+    "V": [
+      "station",
+      4,
+      0
+    ],
+    "W": [
+      "station",
+      0,
+      1
+    ],
+    "Ttl": [
+      "station",
+      0,
+      2
+    ],
+    "Tt": [
+      "station",
+      1,
+      2
+    ],
+    "Ttr": [
+      "station",
+      2,
+      2
+    ],
+    "Tl": [
+      "station",
+      0,
+      3
+    ],
+    "Tr": [
+      "station",
+      2,
+      3
+    ],
+    "Tbl": [
+      "station",
+      0,
+      4
+    ],
+    "Tb": [
+      "station",
+      1,
+      4
+    ],
+    "Tbr": [
+      "station",
+      2,
+      4
+    ]
+  },
+  "layers": {
+    "ground": {
+      "grid": [
+        ". . . . . . . . . . . . . . . R R R . . . . . . . . . . . . . . .",
+        ". . . . . . . . . . . . . . . R R R . . . . . . . . . . . . . . .",
+        ". . . . . . . . . . . . . . . R R R . . . . . . . . . . . . . . .",
+        ". . . . . . . . . . . . . . . R R R . . . . . . . . . . . . . . .",
+        ". . . . . . . . . . . . . . . R R R . . . . . . . . . . . . . . .",
+        ". . . . . Ttl Tt Tt Tt Tt Tt Tt Tt Tt Tt A A A Tt Tt Tt Tt Tt Tt Tt Tt Tt Ttr . . . . .",
+        ". . . . . Tl A B A B A B X B A B A B A B A B A B A B A Tr . . . . .",
+        ". . . . . Tl B A B A X A B A B A B A B A B A B A B A B Tr . . . . .",
+        ". . . . . Tl A B A B A B A B A B A B A B A B A B A B A Tr . . . . .",
+        ". . . . . Tl B A B A B A B A B A B A B A B A B A B A B Tr . . . . .",
+        ". . . . . Tl A B A X A B A B A B A B A B A B A B A B A Tr . . . . .",
+        ". . . . . Tl B A B A B A B A X A B X B A B A B A B A B Tr . . . . .",
+        ". . . . . Tl X B A B A B A B A B A B A B A X A B A B A Tr . . . . .",
+        ". . . . . Tl B A B A B A B A B A B A B A B A B A B A B Tr . . . . .",
+        ". . . . . Tl A B A B A B A B A B A B A B A B X B A B A Tr . . . . .",
+        "H H H H H A B A B A B A B A B A B A B A B A B A B A B A H H H H H",
+        "H H H H H A X B A B A B A B A B A B A B A B A B A B A A H H H H H",
+        "H H H H H A B A X A B A B A B A B A X A B A B A B A B A H H H H H",
+        ". . . . . Tl A B A B A B A B A B A B A B A B A B A B A Tr . . . . .",
+        ". . . . . Tl B A B A B A B A B A B A B A B A B A B A B Tr . . . . .",
+        ". . . . . Tl A B A B A B A B X B A B A B A B X B A B A Tr . . . . .",
+        ". . . . . Tl B A B A X A B A B A B A B A B A B A B A B Tr . . . . .",
+        ". . . . . Tl A B A B A B A B A B A B A B A B A B A B A Tr . . . . .",
+        ". . . . . Tl B A B A B A B A B A B A B A B A B A X A B Tr . . . . .",
+        ". . . . . Tl A B A B A B A B A B A B A B A B A B A B A Tr . . . . .",
+        ". . . . . Tl B A B A B A B A B A B A B A B A B A B A B Tr . . . . .",
+        ". . . . . Tl A B X B A B A B A B A B A B A B A B A B A Tr . . . . .",
+        ". . . . . Tbl Tb Tb Tb Tb Tb Tb Tb Tb Tb A A A Tb Tb Tb Tb Tb Tb Tb Tb Tb Tbr . . . . .",
+        ". . . . . . . . . . . . . . . R R R . . . . . . . . . . . . . . .",
+        ". . . . . . . . . . . . . . . R R R . . . . . . . . . . . . . . .",
+        ". . . . . . . . . . . . . . . R R R . . . . . . . . . . . . . . .",
+        ". . . . . . . . . . . . . . . R R R . . . . . . . . . . . . . . .",
+        ". . . . . . . . . . . . . . . R R R . . . . . . . . . . . . . . ."
+      ]
+    },
+    "objects": {
+      "grid": [
+        "V V V V V V V V V V V V V V V . . . V V V V V V V V V V V V V V V",
+        "V V V V V V V V V V V V V V V . . . V V V V V V V V V V V V V V V",
+        "V V V V V V V V V V V V V V V . . . V V V V V V V V V V V V V V V",
+        "V V V V V V V V V V V V V V V . . . V V V V V V V V V V V V V V V",
+        "V V V V V V V V V V V V V V V . . . V V V V V V V V V V V V V V V",
+        "V V V V V W W W W W W W W W W . . . W W W W W W W W W W V V V V V",
+        "V V V V V W . . . . . . . . . . . . . . . . . . . . . W V V V V V",
+        "V V V V V W . . . . . . . . . . . . . . . . . . . . . W V V V V V",
+        "V V V V V W . . . . . . . . . . . . . . . . . . . . . W V V V V V",
+        "V V V V V W . . . . . . . . . . . . . . . . . . . . . W V V V V V",
+        "V V V V V W . . . . . . . . . . . . . . . . . . . . . W V V V V V",
+        "V V V V V W . . . . . . . . . . . . . . . . . . . . . W V V V V V",
+        "V V V V V W . . . . . . . . . . . . . . . . . . . . . W V V V V V",
+        "V V V V V W . . . . . . . . . . . . . . . . . . . . . W V V V V V",
+        "V V V V V W . . . . . . . . . . . . . . . . . . . . . W V V V V V",
+        ". . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .",
+        ". . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .",
+        ". . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .",
+        "V V V V V W . . . . . . . . . . . . . . . . . . . . . W V V V V V",
+        "V V V V V W . . . . . . . . . . . . . . . . . . . . . W V V V V V",
+        "V V V V V W . . . . . . . . . . . . . . . . . . . . . W V V V V V",
+        "V V V V V W . . . . . . . . . . . . . . . . . . . . . W V V V V V",
+        "V V V V V W . . . . . . . . . . . . . . . . . . . . . W V V V V V",
+        "V V V V V W . . . . . . . . . . . . . . . . . . . . . W V V V V V",
+        "V V V V V W . . . . . . . . . . . . . . . . . . . . . W V V V V V",
+        "V V V V V W . . . . . . . . . . . . . . . . . . . . . W V V V V V",
+        "V V V V V W . . . . . . . . . . . . . . . . . . . . . W V V V V V",
+        "V V V V V W W W W W W W W W W . . . W W W W W W W W W W V V V V V",
+        "V V V V V V V V V V V V V V V . . . V V V V V V V V V V V V V V V",
+        "V V V V V V V V V V V V V V V . . . V V V V V V V V V V V V V V V",
+        "V V V V V V V V V V V V V V V . . . V V V V V V V V V V V V V V V",
+        "V V V V V V V V V V V V V V V . . . V V V V V V V V V V V V V V V",
+        "V V V V V V V V V V V V V V V . . . V V V V V V V V V V V V V V V"
+      ]
+    },
+    "ysort": {
+      "tiles": [
+        {
+          "x": 11,
+          "y": 11,
+          "tileset": "station",
+          "col": 1,
+          "row": 1
+        },
+        {
+          "x": 21,
+          "y": 11,
+          "tileset": "station",
+          "col": 1,
+          "row": 1
+        },
+        {
+          "x": 11,
+          "y": 21,
+          "tileset": "station",
+          "col": 1,
+          "row": 1
+        },
+        {
+          "x": 21,
+          "y": 21,
+          "tileset": "station",
+          "col": 1,
+          "row": 1
+        }
+      ]
+    }
+  },
+  "spawn_points": {
+    "player_start": {
+      "x": 16,
+      "y": 16
+    },
+    "enemy_spawns": [
+      {
+        "x": 16,
+        "y": 3
+      },
+      {
+        "x": 15,
+        "y": 3
+      },
+      {
+        "x": 17,
+        "y": 3
+      },
+      {
+        "x": 16,
+        "y": 29
+      },
+      {
+        "x": 15,
+        "y": 29
+      },
+      {
+        "x": 17,
+        "y": 29
+      },
+      {
+        "x": 3,
+        "y": 16
+      },
+      {
+        "x": 3,
+        "y": 15
+      },
+      {
+        "x": 3,
+        "y": 17
+      },
+      {
+        "x": 29,
+        "y": 16
+      },
+      {
+        "x": 29,
+        "y": 15
+      },
+      {
+        "x": 29,
+        "y": 17
+      }
+    ]
+  }
+}

@@ -1,0 +1,7 @@
+pygame-ce>=2.5.0
+
+# Vision / ASL Detection
+opencv-python>=4.8.0
+mediapipe>=0.10.0,<0.10.15
+numpy>=1.23.5,<2.0.0
+scikit-learn==1.7.2  # must match the version vision/model.p was trained with
